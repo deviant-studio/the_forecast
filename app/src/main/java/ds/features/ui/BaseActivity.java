@@ -1,30 +1,31 @@
 package ds.features.ui;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import com.trello.rxlifecycle.components.support.RxAppCompatActivity;
 import ds.features.App;
 import ds.features.R;
+import ds.features.db.DB;
 import ds.features.network.RestService;
 import rx.subscriptions.CompositeSubscription;
 
 import javax.inject.Inject;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends RxAppCompatActivity {
 
 	@Inject
 	protected RestService service;
 	@Inject
 	protected CompositeSubscription compositeSubscription;
+	@Inject
+	protected DB db;
 
 
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		App.getMainComponent().inject(this);
-
-
 	}
 
 
@@ -47,6 +48,9 @@ public abstract class BaseActivity extends AppCompatActivity {
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			//getSupportActionBar().setHomeButtonEnabled(true);
 		}
+	}
 
+	protected DB db(){
+		return db;
 	}
 }

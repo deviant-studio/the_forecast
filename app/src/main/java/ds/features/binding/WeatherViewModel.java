@@ -1,13 +1,31 @@
 package ds.features.binding;
 
 import android.databinding.BindingAdapter;
-import android.text.format.DateUtils;
+import android.view.View;
 import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
-import ds.features.App;
 import ds.features.Constants;
+import ds.features.db.DB;
+import ds.features.db.gen.Weather;
 
-public class Bindings {
+public class WeatherViewModel {
+
+	public Weather data;
+
+
+	public WeatherViewModel(final long id) {
+		this.data = DB.Companion.getInstance().getWeatherModel(id);
+	}
+
+	public WeatherViewModel(Weather data) {
+		this.data = data;
+	}
+
+
+	public int humidityVisibility() {
+		return data.getHumidity() == null ? View.GONE : View.VISIBLE;
+	}
+
 
 	@BindingAdapter("app:iconUrl")
 	public static void iconUrl(ImageView img, String url) {
@@ -21,16 +39,12 @@ public class Bindings {
 		img.animate().rotationBy(deg);
 	}
 
+
 	@BindingAdapter("app:windDirectionNow")
 	public static void windDirectionNow(ImageView img, float deg) {
-		img.setRotation(deg-90);
+		img.setRotation(deg - 90);
 	}
 
 
-	//@BindingConversion
-	public static String fetchDate(long date) {
-		final int flags = DateUtils.FORMAT_SHOW_TIME | DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_ABBREV_MONTH | DateUtils.FORMAT_NO_YEAR;
-		final String result = DateUtils.formatDateTime(App.getInstance(), date, flags);
-		return result;
-	}
+
 }

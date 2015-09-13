@@ -4,25 +4,32 @@ import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import ds.features.R;
+import ds.features.binding.WeatherViewModel;
 import ds.features.databinding.ItemWeatherBinding;
-import ds.features.model.WeatherData;
 
 import java.util.List;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-	private final List<WeatherData> items;
+	private final List<WeatherViewModel> items;
 	private final Context ctx;
 	private OnClickListener clickListener;
 
 
-	public RecyclerAdapter(Context ctx, final List<WeatherData> items) {
+	public RecyclerAdapter(Context ctx, final List<WeatherViewModel> items) {
 		this.ctx = ctx;
 		this.items = items;
 
+	}
+
+
+	public void addItems(List<WeatherViewModel> newItems) {
+		final int start = items.size();
+		items.addAll(newItems);
+		//notifyDataSetChanged();
+		notifyItemRangeInserted(start, items.size());
 	}
 
 
@@ -30,12 +37,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 	public ViewHolder onCreateViewHolder(final ViewGroup parent, final int position) {
 		final ItemWeatherBinding binder = DataBindingUtil.inflate(LayoutInflater.from(ctx), R.layout.item_weather, parent, false);
 
-		binder.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(final View v) {
-				clickListener.onClick(binder);
-			}
-		});
+		binder.setClicker(v -> clickListener.onClick(binder));
 		return new ViewHolder(binder);
 	}
 
@@ -53,7 +55,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
 
 	public void setOnItemClickListener(OnClickListener l) {
-		clickListener=l;
+		clickListener = l;
 
 	}
 
@@ -69,8 +71,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 			this.binder = binding;
 		}
 	}
+
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public interface OnClickListener {
+
 		void onClick(ItemWeatherBinding binder);
 	}
 }

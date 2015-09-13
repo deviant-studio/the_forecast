@@ -3,8 +3,6 @@
 
     <data>
 
-        <import type="ds.features.binding.Bindings" />
-
         <variable
             name="adapter"
             type="ds.features.ui.RecyclerAdapter"

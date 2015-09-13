@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.transition.Fade;
@@ -15,12 +14,9 @@ import ds.features.App;
 import ds.features.L;
 import ds.features.R;
 import ds.features.databinding.ActivityMainBinding;
-import ds.features.model.CurrWeatherData;
 import ds.features.model.TimeProvider;
 import rx.Observable;
 import rx.Subscription;
-import rx.functions.Action0;
-import rx.functions.Action1;
 
 import javax.inject.Inject;
 import java.util.concurrent.TimeUnit;
@@ -55,9 +51,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 	}
 
 
-
-
-
 	@Override
 	protected void toggleProgress(final boolean enable) {
 
@@ -66,42 +59,21 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 	private void loadCurrWeather() {
 		final Subscription s = service.getWeather()
-		                              .doOnCompleted(new Action0() {
-			                              @Override
-			                              public void call() {
-				                              L.v("completed");
-			                              }
-		                              })
-		                              .doOnUnsubscribe(new Action0() {
-			                              @Override
-			                              public void call() {
-				                              L.v("unsubscribed");
-			                              }
-		                              })
-		                              .subscribe(new Action1<CurrWeatherData>() {
-			                                         @Override
-			                                         public void call(final CurrWeatherData s) {
-				                                         L.v("name=%s, weather=%s", s.name, s.main.temp);
-				                                         binding.setWeather(s);
-			                                         }
-		                                         },
-				                              new Action1<Throwable>() {
-					                              @Override
-					                              public void call(final Throwable throwable) {
-						                              throwable.printStackTrace();
-					                              }
-				                              });
+		                              .doOnCompleted(() -> L.v("completed"))
+		                              .doOnUnsubscribe(() -> L.v("unsubscribed"))
+		                              .compose(bindToLifecycle())
+				                      .subscribe(s1 -> {
+					                      L.v("name=%s, weather=%s", s1.name, s1.main.temp);
+					                      binding.setWeather(s1);
+				                      }, Throwable::printStackTrace);
 		compositeSubscription.add(s);
 	}
 
 
 	private void runTimer() {
 		Observable.interval(1, TimeUnit.SECONDS)
-		          .subscribe(new Action1<Long>() {
-			          @Override
-			          public void call(final Long aLong) {
-				          time.setTime(System.currentTimeMillis());
-			          }
+		          .subscribe(aLong -> {
+			          time.setTime(System.currentTimeMillis());
 		          });
 
 	}
@@ -116,18 +88,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 	@Override
 	public void onClick(final View v) {
-		//final RevealTransition t = (RevealTransition) TransitionInflater.from(this).inflateTransition(R.transition.reveal_transition);
-		//t.addTarget(binding.content);
-		//getWindow().setExitTransition(t);
-
-		int[] location = new int[2];
-		v.getLocationInWindow(location);
-		Point epicenter = new Point(location[0] + v.getMeasuredWidth() / 2,	location[1] + v.getMeasuredHeight() / 2);
-
-
 		animateReveal(binding);
-
-
 	}
 
 
@@ -150,7 +111,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 	}
 
 
-
 	private void gotoList() {
 		Intent intent = Henson.with(MainActivity.this)
 		                      .gotoWeatherListActivity()
@@ -160,9 +120,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 				MainActivity.this/*,
 				binding.content,
 				binding.content.getTransitionName()*/
-				);
+		);
 		startActivity(intent, options.toBundle());
 	}
+
 
 	private void initTransitions() {
 		getWindow().setExitTransition(null);

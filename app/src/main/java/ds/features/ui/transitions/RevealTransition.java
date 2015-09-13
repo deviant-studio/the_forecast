@@ -1,4 +1,4 @@
-package ds.features.ui.reveal;
+package ds.features.ui.transitions;
 
 import android.animation.Animator;
 import android.graphics.Point;

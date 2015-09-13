@@ -14,6 +14,7 @@ import javax.inject.Singleton;
 				NetworkModule.class,
 				RxModule.class,
 				MiscModule.class,
+				AppModule.class
 		}
 )
 public interface MainComponent {

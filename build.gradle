@@ -1,18 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
-buildscript {
 
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:1.3.1'
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:+'
-        classpath 'com.android.databinding:dataBinder:+'
-        //kotlin required plugin
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:+"
-    }
-}
+
 
 allprojects {
     repositories {
@@ -24,3 +13,5 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+

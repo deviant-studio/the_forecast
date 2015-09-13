@@ -3,15 +3,13 @@
 
     <data>
 
-        <import type="ds.features.binding.Bindings" />
-
         <variable
             name="weather"
-            type="ds.features.model.WeatherData"
+            type="ds.features.binding.WeatherViewModel"
             />
 
         <variable
-            name="onClickListener"
+            name="clicker"
             type="android.view.View.OnClickListener"
             />
 
@@ -36,7 +34,7 @@
             android:foreground="?attr/selectableItemBackground"
             android:transitionName="@string/transition_card"
             app:cardElevation="1dp"
-            app:onClickListener="@{onClickListener}"
+            app:onClickListener="@{clicker}"
 
             >
 
@@ -52,7 +50,7 @@
                     android:layout_height="48dp"
                     android:layout_marginRight="8dp"
                     android:transitionName="@string/transition_icon"
-                    app:iconUrl='@{weather.getIconUrl()}'
+                    app:iconUrl='@{weather.data.iconUrl}'
                     />
 
 
@@ -61,7 +59,7 @@
                     style="@style/item_text2"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
-                    android:text="@{Bindings.fetchDate(weather.dt*1000)}"
+                    android:text="@{weather.data.date}"
                     android:transitionName="@string/transition_date"
                     />
 
@@ -69,7 +67,7 @@
                     android:id="@+id/temp"
                     style="@style/item_text1"
                     android:layout_toRightOf="@+id/image"
-                    android:text="@{String.format(&quot;%s°&quot;,weather.main.temp)}"
+                    android:text="@{weather.data.temp}"
                     android:transitionName="@string/transition_temperature"
                     />
 
@@ -78,7 +76,7 @@
                     style="@style/item_text1"
                     android:layout_alignLeft="@+id/temp"
                     android:layout_below="@+id/temp"
-                    android:text="@{String.format(&quot;%s%%&quot;,weather.main.humidity)}"
+                    android:text="@{weather.data.humidity}"
                     android:transitionName="@string/transition_humidity"
                     />
 
@@ -86,7 +84,7 @@
                     android:id="@+id/pressure"
                     style="@style/item_text1"
                     android:layout_toRightOf="@+id/temp"
-                    android:text="@{String.format(&quot;%shpa&quot;,weather.main.pressure)}"
+                    android:text="@{weather.data.pressure}"
                     android:transitionName="@string/transition_pressure"
                     />
 
@@ -98,7 +96,7 @@
                     android:layout_marginRight="4dp"
                     android:layout_toRightOf="@+id/temp"
                     android:minWidth="0dp"
-                    android:text="@{String.format(&quot;%sm/s&quot;,weather.wind.speed)}"
+                    android:text="@{weather.data.wind}"
                     android:transitionName="@string/transition_wind"
                     />
 
@@ -111,16 +109,12 @@
                     android:src="@drawable/ic_trending_neutral_black"
                     android:tint="@color/accent"
                     android:transitionName="@string/transition_wind_direction"
-                    app:windDirection="@{weather.wind.deg}"
+                    app:windDirectionNow="@{weather.data.windDir}"
                     />
 
 
             </RelativeLayout>
 
         </android.support.v7.widget.CardView>
-
-
-  <!--  </FrameLayout>
--->
 
 </layout>

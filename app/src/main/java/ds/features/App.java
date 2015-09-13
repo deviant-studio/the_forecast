@@ -1,8 +1,8 @@
 package ds.features;
 
 import android.app.Application;
-import ds.features.di.DaggerMainComponent;
-import ds.features.di.MainComponent;
+import com.facebook.stetho.Stetho;
+import ds.features.di.*;
 
 public class App extends Application {
 
@@ -20,11 +20,23 @@ public class App extends Application {
 	public void onCreate() {
 		super.onCreate();
 		instance = this;
-	/*	mainComponent = DaggerMainComponent.builder()
-		                                   .networkModule(new NetworkModule())
-		                                   .build();*/
 
-		mainComponent = DaggerMainComponent.create();
+		Stetho.initializeWithDefaults(this);
+
+		/*RealmConfiguration realmConfiguration = new RealmConfiguration
+				.Builder(this)
+				.build();
+		//Realm.deleteRealm(realmConfiguration); // Clean slate
+		Realm.setDefaultConfiguration(realmConfiguration); // Make this Realm the default*/
+
+		mainComponent = DaggerMainComponent.builder()
+		                                   .networkModule(new NetworkModule())
+		                                   .appModule(new AppModule(this))
+		                                   .miscModule(new MiscModule())
+		                                   .rxModule(new RxModule())
+		                                   .build();
+
+		//mainComponent = DaggerMainComponent.create();
 	}
 
 
