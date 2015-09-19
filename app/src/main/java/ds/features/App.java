@@ -21,6 +21,8 @@ public class App extends Application {
 		super.onCreate();
 		instance = this;
 
+		//Gendalf.init(this);
+
 		Stetho.initializeWithDefaults(this);
 
 		/*RealmConfiguration realmConfiguration = new RealmConfiguration

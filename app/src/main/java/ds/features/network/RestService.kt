@@ -18,7 +18,8 @@ public class RestService {
     private val API_KEY: String = "3a2aae4aa5a564852f108fa99754e5f1"
     private val BASE_URL: String = "http://api.openweathermap.org/data/2.5"
 
-    var city = "Kharkiv"
+
+    val city = "Kharkiv"
 
     val api: RestApi
 
@@ -33,12 +34,14 @@ public class RestService {
                 //.setLogLevel(RestAdapter.LogLevel.FULL)
                 .build()
 
-        api = retrofit.create(javaClass<RestApi>())
+        api = retrofit.create(RestApi::class.java)
 
     }
 
     fun getWeather(): Observable<CurrWeatherData> {
-        return api.getWeather(city).compose(applySchedulers())
+        val o/*Observable<CurrWeatherData?>*/ = api.getWeather(city)
+        //o.compose(applySchedulers())
+        return o//.compose(applySchedulers())
     }
 
     fun getForecast5(): Observable<Forecast5> = api.getFiveDaysForecast(city)//.compose(applySchedulers())
@@ -46,6 +49,6 @@ public class RestService {
     fun getForecast16(): Observable<Forecast16> = api.getSixteenDaysForecast(city, 16)//.compose(applySchedulers())
 
     fun <T> applySchedulers(): Observable.Transformer<T, T> = Observable.Transformer() {
-        it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());
+        it.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
     }
 }

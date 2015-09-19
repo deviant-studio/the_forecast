@@ -63,7 +63,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 		                              .doOnUnsubscribe(() -> L.v("unsubscribed"))
 		                              .compose(bindToLifecycle())
 				                      .subscribe(s1 -> {
-					                      L.v("name=%s, weather=%s", s1.name, s1.main.temp);
+					                      L.v("name=%s, weather=%s", s1.getName(), s1.getMain().getTemp());
 					                      binding.setWeather(s1);
 				                      }, Throwable::printStackTrace);
 		compositeSubscription.add(s);
@@ -112,7 +112,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 
 	private void gotoList() {
-		Intent intent = Henson.with(MainActivity.this)
+		Intent intent = Henson.with(this)
 		                      .gotoWeatherListActivity()
 		                      .build();
 
