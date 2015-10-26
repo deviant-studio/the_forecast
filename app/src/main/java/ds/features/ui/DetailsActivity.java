@@ -23,7 +23,6 @@ public class DetailsActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		getWindow().setEnterTransition(TransitionInflater.from(this).inflateTransition(R.transition.slide_transition));
-		//getWindow().setSharedElementEnterTransition(TransitionUtils.makeSharedElementEnterTransition());
 		super.onCreate(savedInstanceState);
 		Dart.inject(this);
 		final ActivityDetailsBinding binder = DataBindingUtil.setContentView(this, R.layout.activity_details);
@@ -51,7 +50,6 @@ public class DetailsActivity extends BaseActivity {
 
 
 	private void animateReveal(final View v) {
-
 	}
 
 

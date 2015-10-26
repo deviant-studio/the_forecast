@@ -22,7 +22,7 @@ import ds.features.binding.WeatherViewModel;
 import ds.features.databinding.ActivityRecyclerBinding;
 import ds.features.databinding.ItemWeatherBinding;
 import ds.features.db.WeatherFactory;
-import ds.features.db.gen.Weather;
+import ds.features.db.realm.Weather;
 import rx.Observable;
 import rx.schedulers.Schedulers;
 
@@ -102,18 +102,20 @@ public class WeatherListActivity extends BaseActivity implements SwipeRefreshLay
 	private void loadForecasts() {
 		toggleProgress(true);
 		Observable<List<Weather>> forecast5 = service.getForecast5()
+		                                             .observeOn(Schedulers.io())
 		                                             .map(w5 -> w5.list)
 		                                             .flatMap(Observable::from)
-		                                             .map(WeatherFactory::get)
+		                                             .map(WeatherFactory.INSTANCE::get)
 		                                             .toList();
 		Observable<List<Weather>> forecast16 = service.getForecast16()
+		                                              .observeOn(Schedulers.io())
 		                                              .map(w5 -> w5.list)
 		                                              .flatMap(Observable::from)
-		                                              .map(WeatherFactory::get)
+		                                              .map(WeatherFactory.INSTANCE::get)
 		                                              .toList();
 
 		Observable.concat(forecast5, forecast16)
-		          .observeOn(Schedulers.io())
+
 		          .doOnNext(items -> db().saveWeatherModel(items))
 		          .flatMap(Observable::from)
 		          .map(WeatherViewModel::new)
@@ -139,7 +141,7 @@ public class WeatherListActivity extends BaseActivity implements SwipeRefreshLay
 
 
 	private void logThread(final String s) {
-		L.v("thread ui? %s [%s]", Utils.isUiThread(), s);
+		L.v("thread ui? %s [%s]", Utils.INSTANCE$.isUiThread(), s);
 	}
 
 

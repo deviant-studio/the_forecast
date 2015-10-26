@@ -6,7 +6,7 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 import ds.features.Constants;
 import ds.features.db.DB;
-import ds.features.db.gen.Weather;
+import ds.features.db.realm.Weather;
 
 public class WeatherViewModel {
 

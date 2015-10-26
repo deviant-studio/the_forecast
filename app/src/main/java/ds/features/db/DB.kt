@@ -1,15 +1,66 @@
 package ds.features.db
 
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
+import ds.features.App
 import ds.features.L
 import ds.features.Utils
-import ds.features.db.gen.DaoMaster
-import ds.features.db.gen.DaoSession
-import ds.features.db.gen.Weather
-import hugo.weaving.DebugLog
+import ds.features.db.realm.Weather
+import io.realm.Realm
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
-public class DB DebugLog constructor(context: Context) {
+public class DB constructor(val context: Context) {
+
+	private val realm: Realm by object : ReadOnlyProperty<DB, Realm> {
+		override fun getValue(db: DB, property: KProperty<*>): Realm {
+			return threadLocalRealm.get()
+		}
+
+	}
+
+	private val threadLocalRealm = object : ThreadLocal<Realm>() {
+		override fun initialValue(): Realm {
+			return Realm.getInstance(context)
+		}
+	}
+
+
+	//@DebugLog
+	public fun saveWeatherModel(list: List<Weather>) {
+		//profile ({
+		L.v("ui? %s", Utils.isUiThread())
+		realm.executeTransaction {
+			for (w in list) {
+				val entity = realm.where(Weather::class.java).equalTo(Weather::id.name, w.id).findFirst()
+				L.v("entity=$entity")
+				if (entity == null || w.humidity != null) {
+					realm.copyToRealmOrUpdate(w)
+				}
+			}
+		}
+		//}, "set weather")
+
+
+	}
+
+	//@DebugLog
+	public fun getWeatherModel(id: Long): Weather? {
+		//val result = profile({
+		L.v("ui? %s", Utils.isUiThread())
+		return realm.where(Weather::class.java).equalTo(Weather::id.name, id).findFirst()
+
+		//}, "get weather")
+
+		//return result
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	companion object {
+		public val instance: DB by lazy { DB(App.getInstance()) }
+	}
+}
+
+/*public class DB constructor(context: Context) {
 
     private val session: DaoSession
 
@@ -22,7 +73,6 @@ public class DB DebugLog constructor(context: Context) {
     }
 
 
-    DebugLog
     public fun saveWeatherModel(list: List<Weather>) {
         L.v("ui? %s", Utils.isUiThread())
         session.runInTx({
@@ -36,7 +86,6 @@ public class DB DebugLog constructor(context: Context) {
     }
 
 
-    DebugLog
     public fun getWeatherModel(id: Long): Weather {
         L.v("ui? %s", Utils.isUiThread())
         return session.getWeatherDao().load(id)
@@ -46,4 +95,4 @@ public class DB DebugLog constructor(context: Context) {
 
         public var instance: DB? = null
     }
-}
+}*/
