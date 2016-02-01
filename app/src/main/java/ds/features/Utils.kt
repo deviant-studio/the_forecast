@@ -2,7 +2,7 @@ package ds.features
 
 import android.os.Looper
 
-public object Utils {
+object Utils {
 
 	fun isUiThread(): Boolean = (Thread.currentThread() === Looper.getMainLooper().thread)
 

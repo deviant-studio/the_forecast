@@ -53,10 +53,10 @@
                 android:layout_alignBottom="@+id/space"
                 android:layout_alignParentTop="true"
                 android:layout_margin="2dp"
-                android:onClick="@{clicker}"
                 android:transitionName="@string/transition_card"
                 app:cardElevation="3dp"
                 />
+                <!--android:onClick="@{clicker}"-->
 
             <LinearLayout
                 android:id="@+id/row1"

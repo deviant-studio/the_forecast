@@ -6,16 +6,11 @@ import ds.features.L
 import ds.features.Utils
 import ds.features.db.realm.Weather
 import io.realm.Realm
-import kotlin.properties.ReadOnlyProperty
-import kotlin.reflect.KProperty
 
 public class DB constructor(val context: Context) {
 
-	private val realm: Realm by object : ReadOnlyProperty<DB, Realm> {
-		override fun getValue(db: DB, property: KProperty<*>): Realm {
-			return threadLocalRealm.get()
-		}
-
+	private val realm: Realm by lazy {
+		threadLocalRealm.get()
 	}
 
 	private val threadLocalRealm = object : ThreadLocal<Realm>() {
@@ -31,7 +26,7 @@ public class DB constructor(val context: Context) {
 		L.v("ui? %s", Utils.isUiThread())
 		realm.executeTransaction {
 			for (w in list) {
-				val entity = realm.where(Weather::class.java).equalTo(Weather::id.name, w.id).findFirst()
+				val entity = realm.where(Weather::class.java).equalTo("id", w.id).findFirst()
 				L.v("entity=$entity")
 				if (entity == null || w.humidity != null) {
 					realm.copyToRealmOrUpdate(w)
@@ -47,7 +42,7 @@ public class DB constructor(val context: Context) {
 	public fun getWeatherModel(id: Long): Weather? {
 		//val result = profile({
 		L.v("ui? %s", Utils.isUiThread())
-		return realm.where(Weather::class.java).equalTo(Weather::id.name, id).findFirst()
+		return realm.where(Weather::class.java).equalTo("id", id).findFirst()
 
 		//}, "get weather")
 

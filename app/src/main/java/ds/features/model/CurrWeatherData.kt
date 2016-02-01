@@ -12,38 +12,31 @@ data class CurrWeatherData(var coord: CurrWeatherData.Coord,
                            var name: String,
                            var cod: Long) {
 
+	data class Coord(var lon: Double,
+	                 var lat: Double)
 
+	data class Weather(var id: Long,
+	                   var main: String,
+	                   var description: String,
+	                   var icon: String)
 
+	data class Main(var temp: Double,
+	                var pressure: Double,
+	                var humidity: Long,
+	                var temp_min: Double)
 
-    data class Coord(var lon: Double,
-                     var lat: Double)
+	data class Wind(var speed: Double,
+	                var deg: Float = 0.toFloat())
 
+	data class Clouds(var all: Long)
 
-    data class Weather(var id: Long,
-                       var main: String,
-                       var description: String,
-                       var icon: String)
-
-    data class Main(var temp: Double,
-                    var pressure: Long,
-                    var humidity: Long,
-                    var temp_min: Double)
-
-    data class Wind(var speed: Double,
-                    var deg: Float = 0.toFloat())
-
-
-    data class Clouds(var all: Long)
-
-
-    data class Sys(
-            var type: Long,
-            var id: Long,
-            var message: Double,
-            var country: String,
-            var sunrise: Long,
-            var sunset: Long
-    )
-
+	data class Sys(
+			var type: Long,
+			var id: Long,
+			var message: Double,
+			var country: String,
+			var sunrise: Long,
+			var sunset: Long
+	              )
 
 }

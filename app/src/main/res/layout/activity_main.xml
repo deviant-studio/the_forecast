@@ -28,11 +28,11 @@
 
         <LinearLayout
             android:id="@+id/content"
-            android:transitionName="content"
-            android:transitionGroup="true"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:transitionGroup="true"
+            android:transitionName="content"
             >
 
             <android.support.v7.widget.Toolbar
@@ -41,13 +41,12 @@
                 app:title="Current Weather"
                 />
 
-            <RelativeLayout
-                android:id="@+id/root"
+            <RelativeLayout android:id="@+id/root"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/primary"
                 android:orientation="vertical"
-
 
                 >
 
@@ -60,11 +59,13 @@
                     />
 
                 <TextView
+
                     android:id="@+id/name"
                     style="@style/item_text4"
                     android:layout_alignBaseline="@+id/nameLabel"
                     android:layout_toRightOf="@+id/nameLabel"
                     android:text="@{weather.name}"
+                    tools:text="Kharkiv"
                     />
 
                 <TextView
@@ -113,11 +114,11 @@
                 android:layout_gravity="right"
                 android:layout_marginRight="?listPreferredItemPaddingRight"
                 android:layout_marginTop="-32dp"
-                android:onClick="@{clicker}"
                 android:src="@drawable/ic_wb_sunny"
                 android:tint="@color/accent"
-                app:backgroundTint="#fff"
                 android:transitionName="fab"
+                app:backgroundTint="#fff"
+                android:onClickListener="@{clicker}"
 
                 />
 
