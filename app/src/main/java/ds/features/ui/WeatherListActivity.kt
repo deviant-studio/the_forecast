@@ -1,6 +1,8 @@
 package ds.features.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
 import android.transition.AutoTransition
 import android.transition.Explode
 import cz.kinst.jakub.viewmodelbinding.ViewModelBindingConfig
@@ -10,7 +12,7 @@ import ds.features.databinding.ActivityRecyclerBinding
 
 class WeatherListActivity : BaseActivity<ActivityRecyclerBinding, RecyclerViewModel>() {
 
-	override fun getViewModelBindingConfig(): ViewModelBindingConfig<RecyclerViewModel>? {
+	override fun getViewModelBindingConfig(): ViewModelBindingConfig {
 		return ViewModelBindingConfig(R.layout.activity_recycler, RecyclerViewModel::class.java)
 	}
 
@@ -27,5 +29,16 @@ class WeatherListActivity : BaseActivity<ActivityRecyclerBinding, RecyclerViewMo
 		window.returnTransition = AutoTransition()
 		window.transitionBackgroundFadeDuration = 200
 	}
+
+	override fun navigateUpTo(upIntent: Intent?): Boolean {
+		return super.navigateUpTo(upIntent)
+	}
+
+	override fun navigate(way: Int, params: Bundle?) {
+		super.navigate(way, params)
+		val i = Intent(activity, DetailsActivity::class.java)
+		ActivityCompat.startActivity(activity, i.putExtra("weatherId", params?.getLong("weatherId")), params)
+	}
+
 
 }

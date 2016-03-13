@@ -1,9 +1,7 @@
 package ds.features.binding
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
+import android.os.Bundle
 import android.view.View
-import android.view.ViewAnimationUtils
 import ds.features.L
 import ds.features.databinding.ActivityDetailsBinding
 import ds.features.db.realm.Weather
@@ -14,12 +12,11 @@ class WeatherViewModel() : BaseViewModel<ActivityDetailsBinding>() {
 		data = w
 	}
 
-	@JvmField var weatherId: Long = 0
 	lateinit var data: Weather
 
 	override fun onViewModelCreated() {
 		super.onViewModelCreated()
-		val id = activity.intent.getLongExtra("weatherId", -1);
+		val id = view.bundle.getLong("weatherId", -1);
 		data = db.getWeatherModel(id)
 	}
 
@@ -31,17 +28,12 @@ class WeatherViewModel() : BaseViewModel<ActivityDetailsBinding>() {
 		L.v("click")
 		val cx = (v.left + v.right) / 2
 		val cy = (v.top + v.bottom) / 2
-		val initialRadius = v.width
+		val b = Bundle()
+		b.putInt("cx",cx)
+		b.putInt("cy",cy)
+		b.putInt("w",v.width)
+		view.navigate(1, b)
 
-		val anim = ViewAnimationUtils.createCircularReveal(binding.card, cx, cy, initialRadius.toFloat(), 0f)
-		anim.addListener(object : AnimatorListenerAdapter() {
-			override fun onAnimationEnd(animation: Animator) {
-				binding.card.visibility = View.INVISIBLE
-				activity.finish()
-			}
-		})
-		anim.duration = 500
-		anim.start()
 	}
 
 	override fun toggleProgress(enable: Boolean) {

@@ -1,7 +1,5 @@
 package ds.features.binding
 
-import android.content.Intent
-import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.util.Pair
 import android.support.v4.view.ViewCompat
@@ -11,17 +9,18 @@ import ds.features.databinding.ActivityRecyclerBinding
 import ds.features.databinding.ItemWeatherBinding
 import ds.features.db.WeatherFactory
 import ds.features.db.realm.Weather
-import ds.features.ui.DetailsActivity
 import ds.features.ui.RecyclerAdapter
 import rx.Observable
 import rx.Observable.from
 
 class RecyclerViewModel : BaseViewModel<ActivityRecyclerBinding>() {
+	companion object {
+		const val NAV_DETAILS = 1
+	}
 
-	var adapter: RecyclerAdapter?=null
+	var adapter: RecyclerAdapter? = null
 
 	private val onItemClickListener: (ItemWeatherBinding) -> Unit = { b ->
-		val i = Intent(activity, DetailsActivity::class.java).putExtra("weatherId", b.weather.data.id)
 		activity.window.decorView.transitionName = "window"
 		val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
 				activity,
@@ -34,7 +33,10 @@ class RecyclerViewModel : BaseViewModel<ActivityRecyclerBinding>() {
 				sharedElement(b.windDirection),
 				sharedElement(b.root),
 				sharedElement(binding.toolbar))
-		ActivityCompat.startActivity(activity, i, options.toBundle())
+
+		val bundle = options.toBundle()
+		bundle.putLong("weatherId", b.weather.data.id)
+		view.navigate(NAV_DETAILS, bundle)
 	}
 
 	private fun sharedElement(v: View): Pair<View, String> {
@@ -97,7 +99,7 @@ class RecyclerViewModel : BaseViewModel<ActivityRecyclerBinding>() {
 	}
 
 	override fun toggleProgress(enable: Boolean) {
-		val refreshLayout = binding!!.swipeRefreshLayout
+		val refreshLayout = binding.swipeRefreshLayout
 		refreshLayout.postDelayed({ if (hasViewAttached()) refreshLayout.isRefreshing = enable }, 100)
 
 	}

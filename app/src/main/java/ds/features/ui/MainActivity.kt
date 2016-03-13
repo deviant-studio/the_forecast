@@ -1,6 +1,8 @@
 package ds.features.ui
 
+import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
 import android.transition.Fade
 import android.transition.Transition
 import android.view.View
@@ -11,7 +13,7 @@ import ds.features.databinding.ActivityMainBinding
 
 class MainActivity : BaseActivity<ActivityMainBinding, CurrWeatherViewModel>() {
 
-	override fun getViewModelBindingConfig(): ViewModelBindingConfig<CurrWeatherViewModel>? {
+	override fun getViewModelBindingConfig(): ViewModelBindingConfig {
 		return ViewModelBindingConfig(R.layout.activity_main, CurrWeatherViewModel::class.java)
 	}
 
@@ -50,5 +52,12 @@ class MainActivity : BaseActivity<ActivityMainBinding, CurrWeatherViewModel>() {
 			override fun onTransitionResume(transition: Transition) {
 			}
 		})
+	}
+
+	override fun navigate(way: Int, params: Bundle?) {
+		super.navigate(way, params)
+		val intent = Intent(context, WeatherListActivity::class.java)
+		val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this)
+		startActivity(intent, options.toBundle())
 	}
 }
