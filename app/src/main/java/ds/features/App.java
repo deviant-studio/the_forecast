@@ -21,8 +21,6 @@ public class App extends Application {
 		super.onCreate();
 		instance = this;
 
-		//Gendalf.init(this);
-
 		Stetho.initializeWithDefaults(this);
 
 		/*RealmConfiguration realmConfiguration = new RealmConfiguration
@@ -35,10 +33,8 @@ public class App extends Application {
 		                                   .networkModule(new NetworkModule())
 		                                   .appModule(new AppModule(this))
 		                                   .miscModule(new MiscModule())
-		                                   .rxModule(new RxModule())
 		                                   .build();
 
-		//mainComponent = DaggerMainComponent.create();
 	}
 
 

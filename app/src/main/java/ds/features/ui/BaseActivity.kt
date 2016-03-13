@@ -1,28 +1,18 @@
 package ds.features.ui
 
+import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.MenuItem
-import com.trello.rxlifecycle.components.support.RxAppCompatActivity
-import ds.features.App
+import cz.kinst.jakub.viewmodelbinding.ViewModel
+import cz.kinst.jakub.viewmodelbinding.ViewModelActivity
 import ds.features.R
-import ds.features.db.DB
-import ds.features.network.RestService
-import javax.inject.Inject
 
-abstract class BaseActivity : RxAppCompatActivity() {
-
-	@Inject @JvmField var service: RestService? = null
-	@Inject @JvmField var db: DB? = null
-
+abstract class BaseActivity<T : ViewDataBinding, K : ViewModel<T>> : ViewModelActivity<T, K>() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		App.getMainComponent().inject(this)
 	}
-
-
-	protected abstract fun toggleProgress(enable: Boolean)
 
 
 	override fun onOptionsItemSelected(menuItem: MenuItem): Boolean {
@@ -32,9 +22,8 @@ abstract class BaseActivity : RxAppCompatActivity() {
 		return super.onOptionsItemSelected(menuItem)
 	}
 
-
-	protected fun setupToolBar() {
-		val tb = findViewById(R.id.toolbar) as Toolbar
+	protected open fun setupToolBar() {
+		val tb = findViewById(R.id.toolbar) as Toolbar?
 		if (tb != null) {
 			setSupportActionBar(tb)
 			supportActionBar!!.setDisplayHomeAsUpEnabled(true)

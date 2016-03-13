@@ -22,7 +22,6 @@ class RecyclerAdapter(private val ctx: Context, private val items: MutableList<W
 
 	override fun onCreateViewHolder(parent: ViewGroup, position: Int): ViewHolder {
 		val binder = DataBindingUtil.inflate<ItemWeatherBinding>(LayoutInflater.from(ctx), R.layout.item_weather, parent, false)
-
 		binder.setClicker { v -> clickListener(binder) }
 		return ViewHolder(binder)
 	}
@@ -30,6 +29,7 @@ class RecyclerAdapter(private val ctx: Context, private val items: MutableList<W
 
 	override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
 		viewHolder.binder.weather = items[position]
+		viewHolder.binder.executePendingBindings()
 	}
 
 

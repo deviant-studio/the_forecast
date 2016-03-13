@@ -4,18 +4,8 @@
     <data>
 
         <variable
-            name="weather"
-            type="ds.features.model.CurrWeatherData"
-            />
-
-        <variable
-            name="clicker"
-            type="android.view.View.OnClickListener"
-            />
-
-        <variable
-            name="timer"
-            type="ds.features.model.TimeProvider"
+            name="viewModel"
+            type="ds.features.binding.CurrWeatherViewModel"
             />
     </data>
 
@@ -24,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-
 
         <LinearLayout
             android:id="@+id/content"
@@ -47,9 +36,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/primary"
                 android:orientation="vertical"
-
                 >
-
 
                 <TextView
                     android:id="@+id/nameLabel"
@@ -59,12 +46,11 @@
                     />
 
                 <TextView
-
                     android:id="@+id/name"
                     style="@style/item_text4"
                     android:layout_alignBaseline="@+id/nameLabel"
                     android:layout_toRightOf="@+id/nameLabel"
-                    android:text="@{weather.name}"
+                    android:text="@{viewModel.weather.name}"
                     tools:text="Kharkiv"
                     />
 
@@ -81,7 +67,7 @@
                     style="@style/item_text4"
                     android:layout_alignBaseline="@+id/tempLabel"
                     android:layout_toRightOf="@+id/tempLabel"
-                    android:text="@{String.valueOf(weather.main.temp)}"
+                    android:text="@{String.valueOf(viewModel.weather.main.temp)}"
 
                     />
 
@@ -100,10 +86,9 @@
                     android:layout_alignBaseline="@+id/timeLabel"
                     android:layout_marginTop="10dp"
                     android:layout_toRightOf="@+id/timeLabel"
-                    android:text="@{timer.time}"
+                    android:text="@{viewModel.timer.time}"
 
                     />
-
 
             </RelativeLayout>
 
@@ -114,11 +99,11 @@
                 android:layout_gravity="right"
                 android:layout_marginRight="?listPreferredItemPaddingRight"
                 android:layout_marginTop="-32dp"
+                app:onClickListener="@{viewModel.onButtonClick}"
                 android:src="@drawable/ic_wb_sunny"
                 android:tint="@color/accent"
                 android:transitionName="fab"
                 app:backgroundTint="#fff"
-                android:onClickListener="@{clicker}"
 
                 />
 

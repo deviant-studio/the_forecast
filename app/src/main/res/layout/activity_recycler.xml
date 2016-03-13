@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:bind="http://schemas.android.com/tools">
 
     <data>
 
         <variable
-            name="adapter"
-            type="ds.features.ui.RecyclerAdapter"
-            />
-
-        <variable
-            name="layoutManager"
-            type="android.support.v7.widget.LinearLayoutManager"
-            />
-
-        <variable
-            name="onRefresh"
-            type="android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener"
+            name="viewModel"
+            type="ds.features.binding.RecyclerViewModel"
             />
 
     </data>
@@ -47,7 +37,7 @@
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:onRefreshListener="@{onRefresh}"
+            app:onRefreshListener="@{viewModel.onRefresh}"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
 
@@ -55,26 +45,14 @@
                 android:id="@+id/recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:adapter="@{adapter}"
-                app:hasFixedSize="@{true}"
-                app:layoutManager="@{layoutManager}"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                bind:adapter="@{viewModel.adapter}"
+                bind:hasFixedSize="@{true}"
 
 
                 />
         </android.support.v4.widget.SwipeRefreshLayout>
 
     </android.support.design.widget.CoordinatorLayout>
-    <!-- <LinearLayout
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:orientation="vertical"
-         >
-
-
-
-
-
-     </LinearLayout>-->
-
 
 </layout>
